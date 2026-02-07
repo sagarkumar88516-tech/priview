@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Fun</title>
+
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        background: #FFF1E6;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+    }
+
+    .box { position: absolute; 
+           top: 50%; 
+           left: 50%; 
+           transform: translate(-50%, -50%); 
+           background: white; 
+           padding: 30px; 
+           width: 300px; 
+           text-align: center; 
+           border-radius: 15px; 
+           box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+
+    h2 {
+        color: #C9184A;
+    }
+
+    button {
+        padding: 12px 30px;
+        border: none;
+        border-radius: 20px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+
+    #yes {
+        background: #E63946;
+        color: white;
+    }
+
+    #no {
+        background: #777;
+        color: white;
+        position: absolute;
+        z-index: 2;
+    }
+
+    video {
+        display: none;
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        background: black;
+        z-index: 1;
+    }
+</style>
+</head>
+
+<body>
+
+<!-- VIDEO -->
+<video id="loveVideo" muted controls playsinline loop>
+    <source src="attached_assets/WhatsApp_Video_2026-02-06_at_6.19.17_PM_1770382585767.mp4" type="video/mp4">
+</video>
+
+<!-- QUESTION -->
+<div class="box" id="questionBox">
+    <h2>Will You BE My Valentine? ❤️</h2>
+    <button id="yes" onclick="yesClick()">Yes</button>
+</div>
+
+<button id="no">No</button>
+
+<script>
+    const noBtn = document.getElementById("no");
+    const yesBtn = document.getElementById("yes");
+    const video = document.getElementById("loveVideo");
+
+    let originalX = 0;
+    let originalY = 0;
+    let resetTimer;
+
+    function setInitialPosition() {
+        const r = yesBtn.getBoundingClientRect();
+        originalX = r.right + 10;
+        originalY = r.top;
+
+        noBtn.style.left = originalX + "px";
+        noBtn.style.top = originalY + "px";
+    }
+
+    window.onload = setInitialPosition;
+    window.onresize = setInitialPosition;
+
+    function moveNo() {
+        clearTimeout(resetTimer);
+
+        noBtn.style.left = Math.random() * (window.innerWidth - 100) + "px";
+        noBtn.style.top = Math.random() * (window.innerHeight - 50) + "px";
+
+        // ⏱️ 2 sec baad wapas apni jagah
+        resetTimer = setTimeout(() => {
+            noBtn.style.left = originalX + "px";
+            noBtn.style.top = originalY + "px";
+        }, 2000);
+    }
+
+    // ❌ NO button kabhi click na ho
+    noBtn.addEventListener("click", e => {
+        e.preventDefault();
+        moveNo();
+    });
+
+    // desktop + mobile
+    noBtn.addEventListener("mouseover", moveNo);
+    noBtn.addEventListener("touchstart", moveNo);
+
+    function yesClick() {
+        document.getElementById("questionBox").style.display = "none";
+        noBtn.style.display = "none";
+
+        video.style.display = "block";
+        video.muted = false;
+        video.play();
+    }
+</script>
+
+</body>
+</html>
